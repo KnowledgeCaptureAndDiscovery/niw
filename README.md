@@ -6,7 +6,7 @@ This is a project to convert [Jupyter Notebooks](http://jupyter.org) into [WINGS
 
 To execute NiW, open the terminal and enter:
 ```
-$ niw example/Disease+Analysis.ipynb
+$ python niw.py example/Disease+Analysis.ipynb
 ```
 
 NiW creates: 
