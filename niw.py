@@ -21,28 +21,59 @@ class NiW(object):
  
         '''
          all cell information - including markdown and code --> says which of the two and stores its contents
+         for instance, if a notebook has 2 cells, a markdown then a code cell
+         it may look like
+         [["the next cell initializes x","markdown"],["x=3\nt=21","code"],...](... implies other cell or component information)
         '''
         self.arr = []
+        '''
+        if there are  one markdown cell, then a code cell, it could look like 
+        [[['x=3','t=21'],2],...]
+        '''
         self.code = []
         self.input = []
         self.output = []
-        '''TODO: What is this?'''
+        '''
+        information on all of the components' parameters 
+        parameter file is the string form of this
+        for instance,
+        [[['P00002plotSecond', 'bool', 'True'],['P00003ga', 'str', '"hias"']],...]
+        The first cell has 2 parameters
+        the first is the name that the parameter is to have, the second is the type of parameter, the third is the suggested value
+        '''
         self.parameters = []
         self.param = None
-        '''TODO: what is it??'''
+        '''        
+        these are local variables in a block not to passed on/used for analysis
+        for instance "for i in range(0,23):" 
+        i would be in this array in an index according to its cell 
+        if only i is banned and is in cell 1 of 4, banned would look like
+        [["i"],[],[],[]]
+        '''
         self.banned = [[]]
-        '''TODO: What is this?'''
+        '''
+        the import names: included to make sure that imports are not confused for variables from previous cells
+        for instance, "import pandas as pd"
+        pd would be saved as not a variable so that
+        "pd.arange(4)" system would not confuse pd as a variable and try to get pd from a previous cell
+        vs  
+        "p.add(3)" system would know p is a variable
+        '''
         self.b = []
         self.newVariables = []
         self.passedOnVariables = []
-        '''TODO: What is this?'''
+        '''
+        strings have endless possibility : they can start with ' or " and can be part of the string with \ or nothing etc.
+        it would take too long to deal with every case in every method 
+        so STRINGS (list) stores each string in the cell 
+        and replaces the string in the cell with something that cannot have been in the code originally. 
+        Later, the strings are put back when everything is finished analyzing
+        '''
         self.strings = []
         self.files = []
         self.methods = None
         self.stdIn = None
         self.allVar = None
-        '''TODO: What is this?'''
-        self.index = None
         self.runFiles = None
         self.dirPath = "workflow"
         self.workflowName = None        
@@ -722,7 +753,6 @@ class NiW(object):
                 code[i][0].insert(0,[toInsert[i][j],""])
                 for g in range(0,len(output[i])):
                         output[i][g][1][0]+=1
-        self.index = index
     
     def insertMethods(self):
         '''
@@ -774,7 +804,6 @@ class NiW(object):
         code = self.code
         output = self.output
         strings = self.strings
-        index = self.index
         for i in range(0,len(code)):
             figSaved = False
             hasFig = False
@@ -787,10 +816,10 @@ class NiW(object):
                     figSaved = True
                     line = code[i][0][j][0]
                     if "," in line[line.find("savefig("):]:
-                        oV="O"+Util().addZeros(len(output[index])+1)+strings[int(line[line.find("savefig(")+17:line.find("savefig(")+                                                                         line[line.find("savefig("):].find(",")-1])-1]
+                        oV="O"+Util().addZeros(len(output[i])+1)+strings[int(line[line.find("savefig(")+17:line.find("savefig(")+                                                                         line[line.find("savefig("):].find(",")-1])-1]
                         code[i][0][j][0]=line[:line.find("savefig(")+8]+"sys.argv[]"+line[line[line.find("savefig("):].find(",")+line.find("savefig("):]
                     else:
-                        oV="O"+Util().addZeros(len(output[index])+1)+strings[int(line[line.find("savefig(")+17:line.find("savefig(")+                                                                         line[line.find("savefig("):].find(")")-1])-1]
+                        oV="O"+Util().addZeros(len(output[i])+1)+strings[int(line[line.find("savefig(")+17:line.find("savefig(")+                                                                         line[line.find("savefig("):].find(")")-1])-1]
                         code[i][0][j][0]=line[:line.find("savefig(")+8]+"sys.argv[]"+line[line[line.find("savefig("):].find(")")                                                                                  +line.find("savefig("):]
                     output[i].append([oV,[j,line.find("savefig(")+17]])
                 elif "savefig()" in st:
