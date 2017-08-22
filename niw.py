@@ -19,7 +19,9 @@ class NiW(object):
     '''
     def __init__(self):
  
-        '''TODO: What is this?'''
+        '''
+         all cell information - including markdown and code --> says which of the two and stores its contents
+        '''
         self.arr = []
         self.code = []
         self.input = []
