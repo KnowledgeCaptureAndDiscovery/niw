@@ -464,17 +464,19 @@ class NiW(object):
 
     def findAllVariables(self,num):
         ''' 
-        @param num: TODO: what is it??
+        @param num: code cell to find all variables from
         @param code
         @param input
         @param output
         @param banned
-        @param b: TODO: what is it??
-        @return array: TODO: what is it??
-        @return index: TODO: what is it??
-        @return banned: TODO: what is it??
+        @param b: see above
+        @return array: includes names and indexes of the variables in the cell 
+        for instance, if a code cell was ["    x = 5","st = 'gg'"]
+        the array would be ["x",[0,4],"st",[1,0]]
+        @return index: index of next character in string of code to be checked
+        @return banned: see above
         
-        TODO: description
+        Finds all important variables in a cell
         '''
         code = self.code
         input = self.input
@@ -976,7 +978,9 @@ class NiW(object):
         @param code
         @return input
         
-        TODO: Description
+        In Wings, there are many characters that are not allowed in the variable name
+        Since I do not know all of the banned, I restricted the name to only letters and numbers
+        This method makes sure that all input names are letters or numbers so that wings will not throw an error
         '''
         input = self.input
         code = self.code
@@ -984,7 +988,7 @@ class NiW(object):
             for j in range(0,len(input[i])):
                 k = 0
                 while k < len(input[i][j][0]):
-                    if not input[i][j][0][k].isalpha() and not Util().isNumber(input[i][j][0][k]) and not input[i][j][0][k] == ".":
+                    if not input[i][j][0][k].isalpha() and not Util().isNumber(input[i][j][0][k]):
                         input[i][j][0]=input[i][j][0][:k] + input[i][j][0][k+1:]
                     else: 
                         k +=1
