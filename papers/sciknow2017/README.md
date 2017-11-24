@@ -1,5 +1,5 @@
-# WORKS'2017
-Resources for the paper submited to WORKS'2017.
+# Sciknow 2017
+Resources for the paper submited to Sciknow 2017.
 
 List of files:
 * <a href="example">Example: the Guardian's Gaza notebook</a> 
